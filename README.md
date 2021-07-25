@@ -6,7 +6,7 @@
 ## Requirements of the system
 - The user gives a URL as input -> our service generate a shorter and unique alias of that URL.
 - Users hit the shorter link -> our service return original link.
-- Links may expire after duration
+- Links may expire after duration -> default duration is 5 years.
 - Users can specify the expiration time
 - Users can't use custom links
 
