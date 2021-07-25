@@ -1,9 +1,123 @@
+definitions:
+  models.GenShorteningUrlReq:
+    properties:
+      expiredAt:
+        type: integer
+      originalUrl:
+        type: string
+      userId:
+        type: string
+    type: object
+  models.GenShorteningUrlRes:
+    properties:
+      expiredAt:
+        type: integer
+      originalUrl:
+        type: string
+      shorteningUrl:
+        type: string
+    type: object
+  models.GetOriginalUrlReq:
+    properties:
+      shorteningUrl:
+        type: string
+    type: object
+  models.GetOriginalUrlRes:
+    properties:
+      createdAt:
+        type: integer
+      expiredAt:
+        type: integer
+      originalUrl:
+        type: string
+      shorteningUrl:
+        type: string
+    type: object
+  models.UrlProcessingError:
+    properties:
+      code:
+        type: integer
+      msg:
+        type: string
+    type: object
 info:
   contact: {}
-  description: this service is golang template
-  title: Template Swagger
+  description: this service is for shortening url
+  title: Shortening Url Swagger
   version: 0.0.1
 paths:
+  /api/url-shortening-service/v1/generate:
+    post:
+      consumes:
+      - application/json
+      description: create shortening url
+      parameters:
+      - description: body
+        in: body
+        name: body
+        required: true
+        schema:
+          $ref: '#/definitions/models.GenShorteningUrlReq'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: ok
+          schema:
+            $ref: '#/definitions/models.GenShorteningUrlRes'
+        "400":
+          description: bad request
+          schema:
+            $ref: '#/definitions/models.UrlProcessingError'
+        "409":
+          description: shortening url conflict
+          schema:
+            $ref: '#/definitions/models.UrlProcessingError'
+        "500":
+          description: internal server error
+          schema:
+            $ref: '#/definitions/models.UrlProcessingError'
+      summary: create shortening url
+      tags:
+      - Shorten Url
+  /api/url-shortening-service/v1/getoriginalurl:
+    post:
+      consumes:
+      - application/json
+      description: get original url by shortening url
+      parameters:
+      - description: body
+        in: body
+        name: body
+        required: true
+        schema:
+          $ref: '#/definitions/models.GetOriginalUrlReq'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: ok
+          schema:
+            $ref: '#/definitions/models.GetOriginalUrlRes'
+        "204":
+          description: url not found
+          schema:
+            $ref: '#/definitions/models.UrlProcessingError'
+        "400":
+          description: bad request
+          schema:
+            $ref: '#/definitions/models.UrlProcessingError'
+        "409":
+          description: shortening url conflict
+          schema:
+            $ref: '#/definitions/models.UrlProcessingError'
+        "500":
+          description: internal server error
+          schema:
+            $ref: '#/definitions/models.UrlProcessingError'
+      summary: get original url by shortening url
+      tags:
+      - Shorten Url
   /health:
     get:
       responses:

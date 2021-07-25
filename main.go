@@ -5,6 +5,7 @@ import (
 
 	"github.com/CharlesChou03/url-shortening-service.git/config"
 	_ "github.com/CharlesChou03/url-shortening-service.git/docs"
+	"github.com/CharlesChou03/url-shortening-service.git/internal/db"
 	"github.com/CharlesChou03/url-shortening-service.git/internal/handlers"
 	"github.com/CharlesChou03/url-shortening-service.git/logger"
 	"github.com/gin-gonic/gin"
@@ -15,6 +16,7 @@ import (
 func setup() {
 	logger.Setup()
 	config.Setup()
+	db.UrlDB = db.SetupMongoDB()
 }
 
 func errorHandlingMiddleWare(log *log.Logger) gin.HandlerFunc {
@@ -36,15 +38,18 @@ func setupRouter() *gin.Engine {
 	r.GET("/swagger/*any", ginSwagger.WrapHandler(swaggerFiles.Handler))
 	r.GET("/health", handlers.HealthHandler)
 	r.GET("/version", handlers.VersionHandler)
+	r.POST("/api/url-shortening-service/v1/generate", handlers.GenerateShorteningUrlHandler)
+	r.POST("/api/url-shortening-service/v1/getoriginalurl", handlers.GetOriginalUrlHandler)
 
 	return r
 }
 
-// @title Template Swagger
+// @title Shortening Url Swagger
 // @version 0.0.1
-// @description this service is golang template
+// @description this service is for shortening url
 func main() {
 	setup()
+	defer db.UrlDB.Close()
 	r := setupRouter()
 	r.Run(":9999")
 }

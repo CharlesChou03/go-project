@@ -24,6 +24,116 @@ var doc = `{
     "host": "{{.Host}}",
     "basePath": "{{.BasePath}}",
     "paths": {
+        "/api/url-shortening-service/v1/generate": {
+            "post": {
+                "description": "create shortening url",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Shorten Url"
+                ],
+                "summary": "create shortening url",
+                "parameters": [
+                    {
+                        "description": "body",
+                        "name": "body",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/models.GenShorteningUrlReq"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "ok",
+                        "schema": {
+                            "$ref": "#/definitions/models.GenShorteningUrlRes"
+                        }
+                    },
+                    "400": {
+                        "description": "bad request",
+                        "schema": {
+                            "$ref": "#/definitions/models.UrlProcessingError"
+                        }
+                    },
+                    "409": {
+                        "description": "shortening url conflict",
+                        "schema": {
+                            "$ref": "#/definitions/models.UrlProcessingError"
+                        }
+                    },
+                    "500": {
+                        "description": "internal server error",
+                        "schema": {
+                            "$ref": "#/definitions/models.UrlProcessingError"
+                        }
+                    }
+                }
+            }
+        },
+        "/api/url-shortening-service/v1/getoriginalurl": {
+            "post": {
+                "description": "get original url by shortening url",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Shorten Url"
+                ],
+                "summary": "get original url by shortening url",
+                "parameters": [
+                    {
+                        "description": "body",
+                        "name": "body",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/models.GetOriginalUrlReq"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "ok",
+                        "schema": {
+                            "$ref": "#/definitions/models.GetOriginalUrlRes"
+                        }
+                    },
+                    "204": {
+                        "description": "url not found",
+                        "schema": {
+                            "$ref": "#/definitions/models.UrlProcessingError"
+                        }
+                    },
+                    "400": {
+                        "description": "bad request",
+                        "schema": {
+                            "$ref": "#/definitions/models.UrlProcessingError"
+                        }
+                    },
+                    "409": {
+                        "description": "shortening url conflict",
+                        "schema": {
+                            "$ref": "#/definitions/models.UrlProcessingError"
+                        }
+                    },
+                    "500": {
+                        "description": "internal server error",
+                        "schema": {
+                            "$ref": "#/definitions/models.UrlProcessingError"
+                        }
+                    }
+                }
+            }
+        },
         "/health": {
             "get": {
                 "summary": "health checker API",
@@ -50,6 +160,72 @@ var doc = `{
                 }
             }
         }
+    },
+    "definitions": {
+        "models.GenShorteningUrlReq": {
+            "type": "object",
+            "properties": {
+                "expiredAt": {
+                    "type": "integer"
+                },
+                "originalUrl": {
+                    "type": "string"
+                },
+                "userId": {
+                    "type": "string"
+                }
+            }
+        },
+        "models.GenShorteningUrlRes": {
+            "type": "object",
+            "properties": {
+                "expiredAt": {
+                    "type": "integer"
+                },
+                "originalUrl": {
+                    "type": "string"
+                },
+                "shorteningUrl": {
+                    "type": "string"
+                }
+            }
+        },
+        "models.GetOriginalUrlReq": {
+            "type": "object",
+            "properties": {
+                "shorteningUrl": {
+                    "type": "string"
+                }
+            }
+        },
+        "models.GetOriginalUrlRes": {
+            "type": "object",
+            "properties": {
+                "createdAt": {
+                    "type": "integer"
+                },
+                "expiredAt": {
+                    "type": "integer"
+                },
+                "originalUrl": {
+                    "type": "string"
+                },
+                "shorteningUrl": {
+                    "type": "string"
+                }
+            }
+        },
+        "models.UrlProcessingError": {
+            "type": "object",
+            "properties": {
+                "code": {
+                    "type": "integer"
+                },
+                "msg": {
+                    "type": "string"
+                }
+            }
+        }
     }
 }`
 
@@ -68,8 +244,8 @@ var SwaggerInfo = swaggerInfo{
 	Host:        "",
 	BasePath:    "",
 	Schemes:     []string{},
-	Title:       "Template Swagger",
-	Description: "this service is golang template",
+	Title:       "Shortening Url Swagger",
+	Description: "this service is for shortening url",
 }
 
 type s struct{}

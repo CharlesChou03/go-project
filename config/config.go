@@ -8,8 +8,11 @@ import (
 )
 
 type envConfig struct {
-	Version  string `env:"VERSION" envDefault:"0.0.1"`
-	MongoURI string `env:"MONGO_URI,required"`
+	Version              string `env:"VERSION" envDefault:"0.0.1"`
+	MongoURI             string `env:"MONGO_URI,required"`
+	ShorteningUrlLength  int    `env:"SHORTENING_URL_LENGTH,required"`
+	UrlHost              string `env:"URL_HOST,required"`
+	DefaultExpiredPeriod int64  `env:"DEFAULT_EXPIRED_PERIOD,required"`
 }
 
 var (
