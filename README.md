@@ -15,4 +15,5 @@
 
 ## Data storage
 - mongoDB
+> index: db.shorteningUrl.createIndex( {"shorteningUrl": 1}, {unique: true} )
 - redis
