@@ -1,0 +1,37 @@
+{
+    "swagger": "2.0",
+    "info": {
+        "description": "this service is golang template",
+        "title": "Template Swagger",
+        "contact": {},
+        "version": "0.0.1"
+    },
+    "paths": {
+        "/health": {
+            "get": {
+                "summary": "health checker API",
+                "responses": {
+                    "200": {
+                        "description": "ok",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                }
+            }
+        },
+        "/version": {
+            "get": {
+                "summary": "service version API",
+                "responses": {
+                    "200": {
+                        "description": "0.0.1",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                }
+            }
+        }
+    }
+}
